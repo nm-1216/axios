@@ -1,3 +1,12 @@
+/*
+
+main.js
+import { AxiosInit }    from 'dora.axios'
+import { UserModule }   from '@/stores/modles/user'
+AxiosInit(router, UserModule, 'http://wx.nieba.cn:9001', Element.alert)
+
+*/
+
 import axios from 'axios'
 
 export function AxiosInit(router: any, userModule: any, baseURL: string, message: Function, timeout: number = 5000) {
