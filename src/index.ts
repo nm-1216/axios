@@ -3,19 +3,18 @@
 main.js
 import { AxiosInit }    from 'dora.axios'
 import { UserModule }   from '@/stores/modles/user'
-AxiosInit(router, UserModule, 'http://wx.nieba.cn:9001', Element.alert)
+AxiosInit(router, UserModule, 'http://wx.nieba.cn:9001', Element.Message)
 
 */
 
 import axios from 'axios'
 
-export function AxiosInit(router: any, userModule: any, baseURL: string, message: Function, timeout: number = 5000) {
+export function AxiosInit(router: any, userModule: any, baseURL: string, message: any, timeout: number = 5000) {
     let Qs = require('qs')
 
     axios.defaults.baseURL = baseURL
     axios.defaults.timeout = timeout
 
-    //登录与页面首次加载时写入，不用每次请求都写入token
     let isLogin = Boolean(userModule.token)
     if (isLogin) {
         axios.defaults.headers.common['Authorization'] = `Bearer ${userModule.token}`;
@@ -23,10 +22,6 @@ export function AxiosInit(router: any, userModule: any, baseURL: string, message
 
     axios.interceptors.request.use(
         config => {
-            // let isLogin = Boolean(userModule.token)
-            // if (isLogin) {
-            //     config.headers.common['Authorization'] = 'Bearer ' + userModule.token;
-            // }
             if (config.method === 'post' || config.method === 'put' || config.method === 'patch') {
                 config.headers.common['Content-Type'] = 'application/json';
 
@@ -63,14 +58,13 @@ export function AxiosInit(router: any, userModule: any, baseURL: string, message
                     }
                 }
             } else if (error.request) {
-                message(error.message);
+                msg = `${error.message}`;
             } else {
                 msg = `${error.message}`;
             }
 
-            message(msg)
+            message.error(msg)
             return Promise.reject(error)
         }
     )
-
 }
